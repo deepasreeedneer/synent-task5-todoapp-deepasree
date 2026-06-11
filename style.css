@@ -87,3 +87,26 @@ body{
         grid-template-columns:1fr;
     }
 }
+.task-item{
+    background:#f8f8f8;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:12px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.delete-btn{
+    border:none;
+    background:#d9534f;
+    color:white;
+    padding:8px 14px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.delete-btn:hover{
+    background:#c9302c;
+}
