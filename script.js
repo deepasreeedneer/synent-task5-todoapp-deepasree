@@ -4,11 +4,11 @@ const taskList = document.getElementById("taskList");
 const taskCount = document.getElementById("taskCount");
 const category = document.getElementById("category");
 
-let count = 0;
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-addBtn.addEventListener("click", addTask);
+renderTasks();
 
-function addTask(){
+addBtn.addEventListener("click", () => {
 
     const taskText = taskInput.value.trim();
 
@@ -17,76 +17,102 @@ function addTask(){
         return;
     }
 
-    const li = document.createElement("li");
+    const task = {
+        text: taskText,
+        category: category.value,
+        completed: false
+    };
 
-    li.classList.add("task-item");
+    tasks.push(task);
 
-    li.innerHTML = `
-        <div>
-            <strong>${category.value}</strong><br>
-            ${taskText}
-        </div>
-
-       <div class="actions">
-
-    <button class="complete-btn">
-        Complete
-    </button>
-
-    <button class="delete-btn">
-        Delete
-    </button>
-
-</div>
-    `;
-
-    taskList.appendChild(li);
+    saveTasks();
+    renderTasks();
 
     taskInput.value = "";
-
-    count++;
-    taskCount.textContent = count;
-
-    removeEmptyMessage();
-    
-    li.querySelector(".complete-btn")
-.addEventListener("click", function(){
-
-    li.classList.toggle("completed");
-
 });
 
-    li.querySelector(".delete-btn")
-      .addEventListener("click", function(){
+function renderTasks(){
 
-        li.remove();
+    taskList.innerHTML = "";
 
-        count--;
-        taskCount.textContent = count;
+    let remaining = 0;
 
-        showEmptyMessage();
-
-      });
-}
-
-function removeEmptyMessage(){
-
-    const empty =
-    document.querySelector(".empty-message");
-
-    if(empty){
-        empty.remove();
-    }
-}
-
-function showEmptyMessage(){
-
-    if(taskList.children.length === 0){
+    if(tasks.length === 0){
 
         taskList.innerHTML = `
         <li class="empty-message">
         No tasks yet. Add your first task.
         </li>
         `;
+
+        taskCount.textContent = 0;
+        return;
     }
+
+    tasks.forEach((task,index)=>{
+
+        const li = document.createElement("li");
+
+        li.classList.add("task-item");
+
+        if(task.completed){
+            li.classList.add("completed");
+        }else{
+            remaining++;
+        }
+
+        li.innerHTML = `
+        <div>
+            <strong>${task.category}</strong><br>
+            ${task.text}
+        </div>
+
+        <div class="actions">
+
+            <button class="complete-btn">
+                ${task.completed ? "Undo" : "Complete"}
+            </button>
+
+            <button class="delete-btn">
+                Delete
+            </button>
+
+        </div>
+        `;
+
+        li.querySelector(".complete-btn")
+        .addEventListener("click",()=>{
+
+            tasks[index].completed =
+            !tasks[index].completed;
+
+            saveTasks();
+            renderTasks();
+
+        });
+
+        li.querySelector(".delete-btn")
+        .addEventListener("click",()=>{
+
+            tasks.splice(index,1);
+
+            saveTasks();
+            renderTasks();
+
+        });
+
+        taskList.appendChild(li);
+
+    });
+
+    taskCount.textContent = remaining;
+}
+
+function saveTasks(){
+
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
+
 }
