@@ -110,3 +110,26 @@ body{
 .delete-btn:hover{
     background:#c9302c;
 }
+
+.completed{
+    opacity:0.7;
+    text-decoration:line-through;
+}
+
+.complete-btn{
+    border:none;
+    background:#4f6f52;
+    color:white;
+    padding:8px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-right:8px;
+}
+
+.complete-btn:hover{
+    background:#3f5942;
+}
+
+.actions{
+    display:flex;
+}

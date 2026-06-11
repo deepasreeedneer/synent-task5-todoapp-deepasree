@@ -27,9 +27,17 @@ function addTask(){
             ${taskText}
         </div>
 
-        <button class="delete-btn">
-            Delete
-        </button>
+       <div class="actions">
+
+    <button class="complete-btn">
+        Complete
+    </button>
+
+    <button class="delete-btn">
+        Delete
+    </button>
+
+</div>
     `;
 
     taskList.appendChild(li);
@@ -40,6 +48,13 @@ function addTask(){
     taskCount.textContent = count;
 
     removeEmptyMessage();
+    
+    li.querySelector(".complete-btn")
+.addEventListener("click", function(){
+
+    li.classList.toggle("completed");
+
+});
 
     li.querySelector(".delete-btn")
       .addEventListener("click", function(){
